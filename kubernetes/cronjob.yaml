@@ -1,0 +1,72 @@
+---
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: mongorestore-cron
+  namespace: mongodb
+spec:
+  schedule: "1  9  *  *  *"  # Run daily at 09:01
+  successfulJobsHistoryLimit: 3
+  failedJobsHistoryLimit: 1
+  jobTemplate:
+    spec:
+      template:
+        spec:
+          restartPolicy: Never
+          volumes:
+            - name: rclone-config
+              secret:
+                secretName: cloudflare-r2-ro
+          containers:
+            - name: mongorestore-widget
+              image: ghcr.io/kyoobit/mongorestore-widget:latest
+              env:
+                - name: MONGO_RW_USERNAME
+                  valueFrom:
+                    secretKeyRef:
+                      name: mongodb-readwrite
+                      key: username
+                - name: MONGO_RW_PASSWORD
+                  valueFrom:
+                    secretKeyRef:
+                      name: mongodb-readwrite
+                      key: password
+                - name: ENCRYPTION_PASSWORD
+                  valueFrom:
+                    secretKeyRef:
+                      name: data-encryption
+                      key: password
+                - name: OSS
+                  valueFrom:
+                    configMapKeyRef:
+                      name: cloudflare-r2-dumps
+                      key: oss
+                - name: OSS_BUCKET
+                  valueFrom:
+                    configMapKeyRef:
+                      name: cloudflare-r2-dumps
+                      key: oss_bucket
+                - name: OSS_PATH
+                  valueFrom:
+                    configMapKeyRef:
+                      name: cloudflare-r2-dumps
+                      key: oss_path
+                - name: MONGO_DB
+                  valueFrom:
+                    configMapKeyRef:
+                      name: cloudflare-r2-dumps
+                      key: mongo_db
+                - name: MONGO_COL
+                  valueFrom:
+                    configMapKeyRef:
+                      name: cloudflare-r2-dumps
+                      key: mongo_col
+                - name: MONGO_ADDR
+                  valueFrom:
+                    configMapKeyRef:
+                      name: cloudflare-r2-dumps
+                      key: mongo_addr
+              volumeMounts:
+                - name: rclone-config
+                  mountPath: "/etc/rclone"
+                  readOnly: true
