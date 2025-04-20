@@ -16,7 +16,7 @@ readonly required_vars=(
     OSS_PATH
     MONGO_DB
     MONGO_COL
-    MONGO_ADDR
+    MONGO_URI
     MONGO_RW_USERNAME
     MONGO_RW_PASSWORD
     ENCRYPTION_PASSWORD
@@ -129,7 +129,7 @@ restore_database() {
     fi
 
     log "Restoring '${MONGO_DB}.${MONGO_COL}' from: ${_database_dir}";
-    mongorestore "mongodb://${MONGO_ADDR}:27017" \
+    mongorestore --uri="${MONGO_URI}" \
     --authenticationDatabase=admin \
     --drop --nsInclude="${MONGO_DB}.${MONGO_COL}" \
     --username="${MONGO_RW_USERNAME}" \

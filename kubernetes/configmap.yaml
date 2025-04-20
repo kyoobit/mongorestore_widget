@@ -10,4 +10,4 @@ data:
   oss_path: <PLACE HOLDER>
   mongo_db: <PLACE HOLDER>
   mongo_col: <PLACE HOLDER>
-  mongo_addr: <PLACE HOLDER>
+  mongo_uri: <PLACE HOLDER>

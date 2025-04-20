@@ -61,11 +61,11 @@ spec:
                     configMapKeyRef:
                       name: cloudflare-r2-dumps
                       key: mongo_col
-                - name: MONGO_ADDR
+                - name: MONGO_URI
                   valueFrom:
                     configMapKeyRef:
                       name: cloudflare-r2-dumps
-                      key: mongo_addr
+                      key: mongo_uri
               volumeMounts:
                 - name: rclone-config
                   mountPath: "/etc/rclone"
