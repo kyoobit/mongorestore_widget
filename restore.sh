@@ -137,6 +137,7 @@ restore_database() {
     "${_database_dir}";
 
     log "Database '${MONGO_DB}.${MONGO_COL}' restored";
+    exit 0;
 }
 
 
