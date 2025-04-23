@@ -37,8 +37,11 @@ fail() {
 
 # Check that the rclone configuration file is available and not empty
 check_dependencies() {
+    log "Checking dependencies";
+
     # Check required environment variables are available
     for var in "${required_vars[@]}"; do
+        log "Checking required environment variable: '${var}'";
         check_env_var "$var";
     done
 
@@ -58,7 +61,7 @@ check_dependencies() {
 check_env_var() {
     local varname="$1"
     if [[ -z "${!varname}" ]]; then
-        fail "Missing environment variable: $varname";
+        fail "Missing environment variable: ${varname}";
     fi
 }
 
@@ -120,6 +123,8 @@ decompress_dump_tgz() {
 
 # Restore the database from a database dump file
 restore_database() {
+    log "Restoring the database: '${MONGO_DB}.${MONGO_COL}'";
+
     log "Find the '${MONGO_DB}' database dump files at: ${LATEST_DUMP_DIR}";
     _database=$(find "${LATEST_DUMP_DIR}" -type d -name "$MONGO_DB" -print -quit);
     _database_dir=$(dirname "${_database}");
