@@ -31,11 +31,11 @@ spec:
                     secretKeyRef:
                       name: mongodb-readwrite
                       key: password
-                - name: ENCRYPTION_PASSWORD
+                - name: ENCRYPTION_KEY
                   valueFrom:
                     secretKeyRef:
                       name: data-encryption
-                      key: password
+                      key: key
                 - name: OSS
                   valueFrom:
                     configMapKeyRef:

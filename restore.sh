@@ -19,7 +19,7 @@ readonly required_vars=(
     MONGO_URI
     MONGO_RW_USERNAME
     MONGO_RW_PASSWORD
-    ENCRYPTION_PASSWORD
+    ENCRYPTION_KEY
 )
 
 log() {
@@ -53,6 +53,11 @@ check_dependencies() {
     # Check if mongorestore is installed
     command -v mongorestore >/dev/null 2>&1 || {
         fail "mongorestore is not installed. Aborting.";
+    }
+
+    # Check if age is installed
+    command -v age >/dev/null 2>&1 || {
+        fail "age is not installed. Aborting.";
     }
 }
 
@@ -91,7 +96,7 @@ download_dump() {
 
 
 # Decrypt the database dump file
-decrypt_dump_enc() {
+decrypt_dump() {
     if [[ "${LATEST_DUMP_FILE}" != *.enc ]]; then
         return
     fi
@@ -99,17 +104,16 @@ decrypt_dump_enc() {
     _latest_dump_unencrypted=$(echo "${LATEST_DUMP_FILE}" | sed 's|.enc||');
 
     log "Decrypting the database dump file: ${LATEST_DUMP_DIR}/${LATEST_DUMP_FILE}";
-    openssl enc -d -aes-256-cbc \
-        -in "${LATEST_DUMP_DIR}/${LATEST_DUMP_FILE}" \
-        -out "${LATEST_DUMP_DIR}/${_latest_dump_unencrypted}" \
-        -pass pass:"${ENCRYPTION_PASSWORD}";
+    age --decrypt --identity "${ENCRYPTION_KEY}" \
+    --output="${LATEST_DUMP_DIR}/${_latest_dump_unencrypted}" \
+    "${LATEST_DUMP_DIR}/${LATEST_DUMP_FILE}"
 
     LATEST_DUMP_FILE="${_latest_dump_unencrypted}";
 }
 
 
 # Decompress the database dump file
-decompress_dump_tgz() {
+decompress_dump() {
     if [[ "${LATEST_DUMP_FILE}" != *.tgz ]]; then
         return
     fi
@@ -154,6 +158,6 @@ LATEST_DUMP_FILE="";
 check_dependencies;
 get_latest_filename;
 download_dump;
-decrypt_dump_enc;
-decompress_dump_tgz;
+decrypt_dump;
+decompress_dump;
 restore_database;
