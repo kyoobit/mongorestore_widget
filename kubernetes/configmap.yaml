@@ -2,7 +2,7 @@
 apiVersion: v1
 kind: ConfigMap
 metadata:
-  name: cloudflare-r2-dumps
+  name: cloudflare-r2-restore
   namespace: mongodb
 data:
   oss: cloudflare_r2

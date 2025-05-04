@@ -27,32 +27,32 @@ spec:
         - name: OSS
           valueFrom:
             configMapKeyRef:
-              name: cloudflare-r2-dumps
+              name: cloudflare-r2-restore
               key: oss
         - name: OSS_BUCKET
           valueFrom:
             configMapKeyRef:
-              name: cloudflare-r2-dumps
+              name: cloudflare-r2-restore
               key: oss_bucket
         - name: OSS_PATH
           valueFrom:
             configMapKeyRef:
-              name: cloudflare-r2-dumps
+              name: cloudflare-r2-restore
               key: oss_path
         - name: MONGO_DB
           valueFrom:
             configMapKeyRef:
-              name: cloudflare-r2-dumps
+              name: cloudflare-r2-restore
               key: mongo_db
         - name: MONGO_COL
           valueFrom:
             configMapKeyRef:
-              name: cloudflare-r2-dumps
+              name: cloudflare-r2-restore
               key: mongo_col
         - name: MONGO_URI
           valueFrom:
             configMapKeyRef:
-              name: cloudflare-r2-dumps
+              name: cloudflare-r2-restore
               key: mongo_uri
       volumeMounts:
         - name: rclone-config
