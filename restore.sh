@@ -79,7 +79,7 @@ get_latest_filename() {
         | tail -n 1 \
         | awk '{print $2}');
 
-    _latest_dump_dt=$(date -d @$(echo "${_latest_dump_file}" | sed -E 's|dump-([0-9]+)\.tgz|\1|'));
+    _latest_dump_dt=$(date -d @$(echo "${_latest_dump_file}" | sed -E 's|dump-([0-9]+)\.tgz.*|\1|'));
     log "Latest available database dump file is: ${_latest_dump_file} (${_latest_dump_dt})";
 
     LATEST_DUMP_FILE="${_latest_dump_file}";
