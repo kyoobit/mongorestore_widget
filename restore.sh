@@ -104,9 +104,9 @@ decrypt_dump() {
     _latest_dump_unencrypted=$(echo "${LATEST_DUMP_FILE}" | sed 's|.enc||');
 
     log "Decrypting the database dump file: ${LATEST_DUMP_DIR}/${LATEST_DUMP_FILE}";
-    age --decrypt --identity "${ENCRYPTION_KEY}" \
+    age --decrypt --identity <(echo "${ENCRYPTION_KEY}") \
     --output="${LATEST_DUMP_DIR}/${_latest_dump_unencrypted}" \
-    "${LATEST_DUMP_DIR}/${LATEST_DUMP_FILE}"
+    "${LATEST_DUMP_DIR}/${LATEST_DUMP_FILE}";
 
     LATEST_DUMP_FILE="${_latest_dump_unencrypted}";
 }
